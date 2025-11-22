@@ -135,6 +135,7 @@
             text-transform: uppercase;
             box-shadow: 8px 8px 0 #000;
             margin: 20px 0;
+            color: #000;
         }
         
         .copy-notification {
@@ -165,7 +166,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: rgb(163, 99, 78);">
     <div class="container">
         <h1>Color Shade Generator</h1>
         
@@ -173,20 +174,12 @@
             Enter a hex color code to see lighter and darker shades in 5% steps
         </div>
         
-        <!-- Input field container -->
         <div class="input-container">
-            <input 
-                type="text" 
-                id="colorInput" 
-                placeholder="#FFFFFF" 
-                maxlength="7"
-            >
+            <input type="text" id="colorInput" placeholder="#FFFFFF" maxlength="7">
         </div>
         
-        <!-- Container for all shade boxes -->
         <div id="shadeContainer" class="shade-container"></div>
         
-        <!-- Copy notification popup -->
         <div id="copyNotification" class="copy-notification">
             ✓ Copied!
             <span id="copiedHex" class="copied-hex"></span>
@@ -369,6 +362,10 @@
             // Validate hex color format
             if (!/^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hexColor)) {
                 shadeContainer.innerHTML = '<div class="error-message">⚠ Invalid hex color code ⚠</div>';
+                
+                // Reset input style on invalid
+                colorInput.style.backgroundColor = '#ffffff';
+                colorInput.style.color = '#000000';
                 return;
             }
             
@@ -376,6 +373,10 @@
             if (!hexColor.startsWith('#')) {
                 hexColor = '#' + hexColor;
             }
+            
+            // UPDATED: Change input background and text color for WCAG compliance
+            colorInput.style.backgroundColor = hexColor;
+            colorInput.style.color = getContrastColor(hexColor);
             
             const rgb = hexToRgb(hexColor);
             const shades = [];
@@ -438,8 +439,10 @@
             if (value) {
                 generateShades(value);
             } else {
-                // Clear shades if input is empty
+                // Clear shades and reset input style if input is empty
                 shadeContainer.innerHTML = '';
+                colorInput.style.backgroundColor = '#ffffff';
+                colorInput.style.color = '#000000';
             }
         });
 
